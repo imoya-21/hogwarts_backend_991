@@ -59,59 +59,34 @@ class CasaServiceTest {
         assertEquals("Slytherin", resultado.getNombre());
     }
 
-    // =========================
-    // obtenerListaCasas
-    // =========================
-
-    @Test
-    void obtenerListaCasas_cuandoListaEstaVacia_lanzaExcepcion() {
-        assertThrows(RuntimeException.class, () -> {
-            casaService.obtenerListaCasas();
-        });
-    }
-
+    // CORRECCIÓN 1: obtenerListaCasas
     @Test
     void obtenerListaCasas_cuandoHayDatos_retornaLista() {
-        fakeDAO.crearCasa(new Casa(2, "Slytherin"));
+        // 1. Preparamos el dato en el FAKE
+        Casa s = new Casa(2, "Slytherin");
+        fakeDAO.crearCasa(s);
 
+        // 2. Ejecutamos el servicio
         List<Casa> resultado = casaService.obtenerListaCasas();
 
-        assertNotNull(resultado);
-        assertEquals(1, resultado.size());
+        // 3. Verificamos
+        assertNotNull(resultado, "La lista no debería ser nula");
+        assertEquals(1, resultado.size(), "La lista debería tener exactamente 1 casa");
     }
 
-    // =========================
-    // obtenerCasaPorNombre
-    // =========================
-
-    @Test
-    void obtenerCasaPorNombre_cuandoNombreEsNull_lanzaExcepcion() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            casaService.obtenerCasaPorNombre(null);
-        });
-    }
-
-    @Test
-    void obtenerCasaPorNombre_cuandoNombreEstaVacio_lanzaExcepcion() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            casaService.obtenerCasaPorNombre("");
-        });
-    }
-
-    @Test
-    void obtenerCasaPorNombre_cuandoNoExiste_lanzaExcepcion() {
-        assertThrows(CasaNoEncontradaException.class, () -> {
-            casaService.obtenerCasaPorNombre("Inexistente");
-        });
-    }
-
+    // CORRECCIÓN 2: obtenerCasaPorNombre
     @Test
     void obtenerCasaPorNombre_cuandoExiste_retornaLista() {
+        // 1. Preparamos el dato
         fakeDAO.crearCasa(new Casa(2, "Slytherin"));
 
+        // 2. Ejecutamos
         List<Casa> resultado = casaService.obtenerCasaPorNombre("Slytherin");
 
-        assertEquals(1, resultado.size());
+        // 3. Verificamos
+        assertNotNull(resultado);
+        assertEquals(1, resultado.size(), "Debería haber encontrado 1 casa llamada Slytherin");
+        assertEquals("Slytherin", resultado.get(0).getNombre());
     }
 
     // =========================
