@@ -1,11 +1,14 @@
 services:
-  app:
-    image: ghcr.io/profies/aaee_mapamundi_sb:latest
-    container_name: aaee_mapamundi_app_xxx
-    ports:
-      - "8080:8080"
+  db:
+    image: mariadb:10.6
+    container_name: mariadb_hogwarts_ejm
+    restart: always
     env_file:
       - .env
-    depends_on:
-      - db
-    restart: always
+    environment:
+      - MARIADB_DATABASE=${DB_NAME}
+      - MARIADB_USER=${DB_USER}
+      - MARIADB_PASSWORD=${DB_PASSWORD}
+      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    ports:
+      - "4306:3306"
